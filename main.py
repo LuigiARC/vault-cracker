@@ -22,7 +22,7 @@ red = (255, 0, 0)
 INNER_RADIUS = 100
 OUTER_RADIUS = 150
 MARKER_WIDTH = 5
-MARKER_SPEED = 5
+MARKER_SPEED = 6
 
 # Skill check difficulty
 global DIFFICULTY
