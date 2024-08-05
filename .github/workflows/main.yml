@@ -22,7 +22,5 @@ jobs:
           upload_exe_with_name: 'Vault-Cracker.exe'
           options: --onefile, --name "Vault-Cracker.exe", --windowed
       - uses: xresloader/upload-to-github-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           file: "Vault-Cracker.exe"
