@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create Executable
-      - uses: sayyid5416/pyinstaller@v1
+        uses: sayyid5416/pyinstaller@v1
         with:
           python_ver: '3.12.4'
           spec: 'main.py'
@@ -22,6 +22,7 @@ jobs:
           upload_exe_with_name: 'Vault-Cracker.exe'
           options: --onefile, --name "Vault-Cracker.exe", --windowed
           
-      - uses: xresloader/upload-to-github-release@v1
+      - name: Upload to GitHub Release
+        uses: xresloader/upload-to-github-release@v1
         with:
           file: "Vault-Cracker.exe"
