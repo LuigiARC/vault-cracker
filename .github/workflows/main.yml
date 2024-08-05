@@ -13,10 +13,15 @@ jobs:
 
     steps:
       - name: Create Executable
-        uses: sayyid5416/pyinstaller@v1
+      - uses: sayyid5416/pyinstaller@v1
         with:
           python_ver: '3.12.4'
           spec: 'main.py'
           requirements: 'requirements.txt'
-          upload_exe_with_name: 'Vault-Cracker'
-          options: --onefile, --name "Vault-Cracker", --windowed
+          upload_exe_with_name: 'Vault-Cracker.exe'
+          options: --onefile, --name "Vault-Cracker.exe", --windowed
+      - uses: xresloader/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: "Vault-Cracker.exe"
