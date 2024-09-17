@@ -110,17 +110,35 @@ angle = 0
 clock = pygame.time.Clock()
 
 while run:
-    screen.blit(static_surface, (0, 0))
-    screen.blit(dynamic_surface, (0, 0))
+
+    # Must blit the new elements to the screen and draw the marker at the beginning of the game loop
+    screen.blit(static_surface, (0, 0))  # Blit the static elements
+    screen.blit(dynamic_surface, (0, 0))  # Blit the dynamic elements
+
     draw_marker(angle)
 
-    angle = (angle - MARKER_SPEED) % 360
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_e:
+                dynamic_surface.fill((0, 0, 0, 0))  # Clear the dynamic surface
+                
+                pygame.time.delay(500)
+                
+                print(start_angle, angle, end_angle)
+                
+                # Check if the marker is within the green area by checking if the angle is between the start and end angle
+                if start_angle <= angle <= end_angle or start_angle <= (angle + 360) <= end_angle:
+                    #DEBUG 
+                    print("Success")
+                    font = pygame.font.Font(None, 32)
+                    text = font.render("7000", 1, black)
+                    screen.blit(text, (CENTER_X - 50, CENTER_Y - 50))
+                    pygame.display.flip()
+                    pygame.time.delay(1000)  # Display the number for 1 second
+    
                 # Check if the marker is in the deep green zone first
                 if (deep_start_angle <= angle <= deep_end_angle) or (deep_start_angle > deep_end_angle and (angle >= deep_start_angle or angle <= deep_end_angle)):
                     font = pygame.font.Font(None, 72)
@@ -134,7 +152,7 @@ while run:
                     dynamic_surface.fill((0, 0, 0, 0))  # Clear the dynamic surface before drawing new skill check
                     # increase the difficulty of the skill check
                     DIFFICULTY -= 10
-                    draw_skill_check(dynamic_surface)
+
                 elif (start_angle <= angle <= end_angle) or (start_angle > end_angle and (angle >= start_angle or angle <= end_angle)):
                     font = pygame.font.Font(None, 72)
                     text = font.render("3500", True, green)
@@ -144,9 +162,6 @@ while run:
                     pygame.display.update()
                     pygame.time.wait(1000)
 
-                    dynamic_surface.fill((0, 0, 0, 0))  # Clear the dynamic surface before drawing new skill check
-                    draw_skill_check(dynamic_surface)
-
                 else:
                     # pause for 1 second so that the player can see where they landed the marker
                     pygame.display.update()
@@ -154,9 +169,13 @@ while run:
 
                     # reset the difficulty of the skill check
                     DIFFICULTY = INITIAL_DIFFICULTY
-                    dynamic_surface.fill((0, 0, 0, 0))    
-                    draw_skill_check(dynamic_surface)
 
+                # Draw Skill Check only after checking if the user hit the mark
+                draw_skill_check(dynamic_surface)
+     
+    # Ensures the marker moves in a circular clockwise motion
+    angle = (angle - 5) % 360
+    
     pygame.display.update()
     clock.tick(60)
     
