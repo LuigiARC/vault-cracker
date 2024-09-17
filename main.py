@@ -128,16 +128,6 @@ while run:
                 pygame.time.delay(500)
                 
                 print(start_angle, angle, end_angle)
-                
-                # Check if the marker is within the green area by checking if the angle is between the start and end angle
-                if start_angle <= angle <= end_angle or start_angle <= (angle + 360) <= end_angle:
-                    #DEBUG 
-                    print("Success")
-                    font = pygame.font.Font(None, 32)
-                    text = font.render("7000", 1, black)
-                    screen.blit(text, (CENTER_X - 50, CENTER_Y - 50))
-                    pygame.display.flip()
-                    pygame.time.delay(1000)  # Display the number for 1 second
     
                 # Check if the marker is in the deep green zone first
                 if (deep_start_angle <= angle <= deep_end_angle) or (deep_start_angle > deep_end_angle and (angle >= deep_start_angle or angle <= deep_end_angle)):
