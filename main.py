@@ -43,6 +43,7 @@ def draw_circles(surface):
 def draw_skill_check(surface):
     # Use global variables to store the start and end angles of the skill check for later checking
     global start_angle, end_angle, deep_start_angle, deep_end_angle
+    
     # Randomly generate the start and end angles of the skill check
     start_angle = random.randint(0, 360)
     arc_length = DIFFICULTY
@@ -110,27 +111,26 @@ angle = 0
 clock = pygame.time.Clock()
 
 while run:
-
     # Must blit the new elements to the screen and draw the marker at the beginning of the game loop
     screen.blit(static_surface, (0, 0))  # Blit the static elements
     screen.blit(dynamic_surface, (0, 0))  # Blit the dynamic elements
 
     draw_marker(angle)
 
-    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_e:
+                # Display queued update to prevent marker jump
+                pygame.display.update()
+                
+                # Pause before doing anything else
+                pygame.time.wait(500)
                 dynamic_surface.fill((0, 0, 0, 0))  # Clear the dynamic surface
-                
-                pygame.time.delay(500)
-                
-                print(start_angle, angle, end_angle)
     
                 # Check if the marker is in the deep green zone first
-                if (deep_start_angle <= angle <= deep_end_angle) or (deep_start_angle > deep_end_angle and (angle >= deep_start_angle or angle <= deep_end_angle)):
+                if (deep_start_angle <= angle <= deep_end_angle):
                     font = pygame.font.Font(None, 72)
                     text = font.render("7000", True, deep_green)
                     screen.blit(text, (CENTER_X - text.get_width() // 2, CENTER_Y - text.get_height() // 2))
@@ -143,7 +143,7 @@ while run:
                     # increase the difficulty of the skill check
                     DIFFICULTY -= 10
 
-                elif (start_angle <= angle <= end_angle) or (start_angle > end_angle and (angle >= start_angle or angle <= end_angle)):
+                elif (start_angle <= angle <= end_angle):
                     font = pygame.font.Font(None, 72)
                     text = font.render("3500", True, green)
                     screen.blit(text, (CENTER_X - text.get_width() // 2, CENTER_Y - text.get_height() // 2))
@@ -160,7 +160,7 @@ while run:
                     # reset the difficulty of the skill check
                     DIFFICULTY = INITIAL_DIFFICULTY
 
-                # Draw Skill Check only after checking if the user hit the mark
+                # Draw Skill Check only after checking where the user hit the marker
                 draw_skill_check(dynamic_surface)
      
     # Ensures the marker moves in a circular clockwise motion
