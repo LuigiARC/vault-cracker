@@ -73,13 +73,18 @@ run = True
 angle = 0
 clock = pygame.time.Clock()
 while run:
+    # Must blit the new elements to the screen and draw the marker at the beginning of the game loop
+    screen.blit(static_surface, (0, 0))  # Blit the static elements
+    screen.blit(dynamic_surface, (0, 0))  # Blit the dynamic elements
+
+    draw_marker(angle)
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_e:
                 dynamic_surface.fill((0, 0, 0, 0))  # Clear the dynamic surface
-                draw_skill_check(dynamic_surface)
                 
                 pygame.time.delay(500)
                 
@@ -94,13 +99,11 @@ while run:
                     screen.blit(text, (CENTER_X - 50, CENTER_Y - 50))
                     pygame.display.flip()
                     pygame.time.delay(1000)  # Display the number for 1 second
+                
+                # Draw Skill Check only after checking if the user hit the mark
+                draw_skill_check(dynamic_surface)
 
 
-    screen.blit(static_surface, (0, 0))  # Blit the static elements
-    screen.blit(dynamic_surface, (0, 0))  # Blit the dynamic elements
-
-    draw_marker(angle)
-    
     # Ensures the marker moves in a circular clockwise motion
     angle = (angle - 5) % 360
     
