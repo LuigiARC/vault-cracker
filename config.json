@@ -1,0 +1,25 @@
+{
+    "window_size": {
+        "width": 640,
+        "height": 480
+    },
+    "colors": {
+        "white": [255, 255, 255],
+        "black": [0, 0, 0],
+        "green": [0, 255, 0],
+        "deep_green": [0, 128, 0],
+        "red": [255, 0, 0]
+    },
+    "circle_settings": {
+        "inner_radius": 100,
+        "outer_radius": 150,
+        "marker_width": 5,
+        "marker_speed": 6
+    },
+    "skill_check": {
+        "initial_difficulty": 50
+    },
+    "pygame_constants": {
+        "hit_key": "e"
+    }
+}

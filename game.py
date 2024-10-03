@@ -75,7 +75,7 @@ def gameLoop():
     
     # Use global variable based initially based on import to store the difficulty of the skill check
     global difficulty
-    difficulty = DIFFICULTY
+    difficulty = INITIAL_DIFFICULTY
     
     draw_circles(static_surface)
     draw_skill_check(dynamic_surface)
