@@ -4,9 +4,9 @@ import random
 from constants import *
 
 def draw_circles(surface):
-    surface.fill(white)
-    pygame.draw.circle(surface, black, (CENTER_X, CENTER_Y), OUTER_RADIUS, 2) # Outer Circle
-    pygame.draw.circle(surface, black, (CENTER_X, CENTER_Y), INNER_RADIUS, 2) # Inner Circle
+    surface.fill(WHITE)
+    pygame.draw.circle(surface, BLACK, (CENTER_X, CENTER_Y), OUTER_RADIUS, 2) # Outer Circle
+    pygame.draw.circle(surface, BLACK, (CENTER_X, CENTER_Y), INNER_RADIUS, 2) # Inner Circle
     
 def draw_skill_check(surface):
     # Use global variables to store the start and end angles of the skill check for later checking
@@ -14,7 +14,7 @@ def draw_skill_check(surface):
     
     # Randomly generate the start and end angles of the skill check
     start_angle = random.randint(0, 360)
-    arc_length = DIFFICULTY
+    arc_length = difficulty
     end_angle = (start_angle + arc_length) % 360
 
     deep_arc_length = arc_length // 3
@@ -26,8 +26,8 @@ def draw_skill_check(surface):
     deep_start_rad = math.radians(deep_start_angle)
     deep_end_rad = math.radians(deep_end_angle)
     
-    pygame.draw.arc(surface, green, (CENTER_X - OUTER_RADIUS, CENTER_Y - OUTER_RADIUS, 2 * OUTER_RADIUS, 2 * OUTER_RADIUS), start_rad, end_rad, 2)
-    pygame.draw.arc(surface, green, (CENTER_X - INNER_RADIUS, CENTER_Y - INNER_RADIUS, 2 * INNER_RADIUS, 2 * INNER_RADIUS), start_rad, end_rad, 2)
+    pygame.draw.arc(surface, GREEN, (CENTER_X - OUTER_RADIUS, CENTER_Y - OUTER_RADIUS, 2 * OUTER_RADIUS, 2 * OUTER_RADIUS), start_rad, end_rad, 2)
+    pygame.draw.arc(surface, GREEN, (CENTER_X - INNER_RADIUS, CENTER_Y - INNER_RADIUS, 2 * INNER_RADIUS, 2 * INNER_RADIUS), start_rad, end_rad, 2)
     
     points = []
     for angle in range(start_angle, end_angle + 1):
@@ -40,11 +40,11 @@ def draw_skill_check(surface):
         points.append((x, y))
     
     if len(points) > 2:
-        pygame.draw.polygon(surface, green, points)
+        pygame.draw.polygon(surface, GREEN, points)
 
     # Draw deep green zone
-    pygame.draw.arc(surface, deep_green, (CENTER_X - OUTER_RADIUS, CENTER_Y - OUTER_RADIUS, 2 * OUTER_RADIUS, 2 * OUTER_RADIUS), deep_start_rad, deep_end_rad, 2)
-    pygame.draw.arc(surface, deep_green, (CENTER_X - INNER_RADIUS, CENTER_Y - INNER_RADIUS, 2 * INNER_RADIUS, 2 * INNER_RADIUS), deep_start_rad, deep_end_rad, 2)
+    pygame.draw.arc(surface, DEEP_GREEN, (CENTER_X - OUTER_RADIUS, CENTER_Y - OUTER_RADIUS, 2 * OUTER_RADIUS, 2 * OUTER_RADIUS), deep_start_rad, deep_end_rad, 2)
+    pygame.draw.arc(surface, DEEP_GREEN, (CENTER_X - INNER_RADIUS, CENTER_Y - INNER_RADIUS, 2 * INNER_RADIUS, 2 * INNER_RADIUS), deep_start_rad, deep_end_rad, 2)
     
     deep_points = []
     for angle in range(deep_start_angle, deep_end_angle + 1):
@@ -57,14 +57,14 @@ def draw_skill_check(surface):
         deep_points.append((x, y))
     
     if len(deep_points) > 2:
-        pygame.draw.polygon(surface, deep_green, deep_points)
+        pygame.draw.polygon(surface, DEEP_GREEN, deep_points)
     
 def draw_marker(angle):
     x1 = CENTER_X + OUTER_RADIUS * math.cos(math.radians(angle))
     y1 = CENTER_Y - OUTER_RADIUS * math.sin(math.radians(angle))
     x2 = CENTER_X + INNER_RADIUS * math.cos(math.radians(angle))
     y2 = CENTER_Y - INNER_RADIUS * math.sin(math.radians(angle))
-    pygame.draw.line(screen, red, (x1, y1), (x2, y2), MARKER_WIDTH)
+    pygame.draw.line(screen, RED, (x1, y1), (x2, y2), MARKER_WIDTH)
 
 
 
@@ -72,6 +72,13 @@ def gameLoop():
     clock = pygame.time.Clock()
     angle = 0
     loop = True
+    
+    # Use global variable based initially based on import to store the difficulty of the skill check
+    global difficulty
+    difficulty = DIFFICULTY
+    
+    draw_circles(static_surface)
+    draw_skill_check(dynamic_surface)
     
     while(loop):
         # Must blit the new elements to the screen and draw the marker at the beginning of the game loop
@@ -82,7 +89,7 @@ def gameLoop():
 
         for event in pygame.event.get():
             if (event.type == pygame.KEYDOWN): 
-                if (event.key == pygame.K_e):
+                if (event.key == hit_key):
                     # Display queued update to prevent marker jump
                     pygame.display.update()
                     
@@ -93,7 +100,7 @@ def gameLoop():
                     # Check if the marker is in the deep green zone first
                     if (deep_start_angle <= angle <= deep_end_angle):
                         font = pygame.font.Font(None, 72)
-                        text = font.render("7000", True, deep_green)
+                        text = font.render("7000", True, DEEP_GREEN)
                         screen.blit(text, (CENTER_X - text.get_width() // 2, CENTER_Y - text.get_height() // 2))
 
                         # pause for 1 second so that the player can see where they landed the marker
@@ -102,11 +109,11 @@ def gameLoop():
 
                         dynamic_surface.fill((0, 0, 0, 0))  # Clear the dynamic surface before drawing new skill check
                         # increase the difficulty of the skill check
-                        DIFFICULTY -= 10
+                        difficulty -= 10
 
                     elif (start_angle <= angle <= end_angle):
                         font = pygame.font.Font(None, 72)
-                        text = font.render("3500", True, green)
+                        text = font.render("3500", True, GREEN)
                         screen.blit(text, (CENTER_X - text.get_width() // 2, CENTER_Y - text.get_height() // 2))
 
                         # pause for 1 second so that the player can see where they landed the marker
@@ -119,7 +126,7 @@ def gameLoop():
                         pygame.time.wait(1000)
 
                         # reset the difficulty of the skill check
-                        DIFFICULTY = INITIAL_DIFFICULTY
+                        difficulty = INITIAL_DIFFICULTY
 
                     # Draw Skill Check only after checking where the user hit the marker
                     draw_skill_check(dynamic_surface)

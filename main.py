@@ -18,23 +18,26 @@ def menuStartButton(x, y, w, h, active, inactive):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
 
+    # If the mouse is hovering over the button
     if x + w > mouse[0] > x and y + h > mouse[1] > y:
+        # Show the hover image
         screen.blit(active, (x, y))
-        return True
+        # If the button is clicked return True to start the game
+        if (click[0] == 1):
+            return True
+    
+    # Otherwise show the inactive image and return False
     else:
         screen.blit(inactive, (x, y))
         return False
 
 run = True
-
 while (run):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
     
     if (start):
-        draw_circles(static_surface)
-        draw_skill_check(dynamic_surface)
         gameLoop()
     else:
         screen.blit(bg, (0, 0))
