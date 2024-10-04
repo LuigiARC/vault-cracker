@@ -66,8 +66,6 @@ def draw_marker(angle):
     y2 = CENTER_Y - INNER_RADIUS * math.sin(math.radians(angle))
     pygame.draw.line(screen, RED, (x1, y1), (x2, y2), MARKER_WIDTH)
 
-
-
 def gameLoop():
     clock = pygame.time.Clock()
     angle = 0
@@ -130,13 +128,16 @@ def gameLoop():
 
                     # Draw Skill Check only after checking where the user hit the marker
                     draw_skill_check(dynamic_surface)
+                elif (event.key == pygame.K_ESCAPE):
+                    return True, False
+                    
                 
-                elif (event.type == pygame.QUIT):
-                    loop = False
+            elif (event.type == pygame.QUIT):
+                loop = False
         
         # Ensures the marker moves in a circular clockwise motion
         angle = (angle - 5) % 360
         
         pygame.display.update()
         clock.tick(60)
-    pygame.quit()
+    return False, True

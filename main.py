@@ -42,11 +42,12 @@ def Button(x, y, w, h, active, inactive):
 run = True
 while (run):
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if (event.type == pygame.QUIT):
             run = False
     
     if (start):
-        gameLoop()
+        # Return more than one value from the game loop to determine if menu should be displayed or if game shoudl terminate
+        run, start = gameLoop()
     else:
         screen.blit(bg, (0, 0))
         # Start button handling
