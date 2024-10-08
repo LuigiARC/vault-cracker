@@ -1,6 +1,7 @@
 import pygame
 from constants import *
 from game import gameLoop, draw_circles, draw_skill_check
+from settings import draw_settings_menu
 
 pygame.init()
 
@@ -25,6 +26,7 @@ settings_y = screen.get_height() - settingsBtn.get_height() - 10  # 20 pixels pa
 def Button(x, y, w, h, active, inactive):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
+    released = False
 
     # If the mouse is hovering over the button
     if x + w > mouse[0] > x and y + h > mouse[1] > y:
@@ -55,6 +57,7 @@ while (run):
         
         if(Button(settings_x, settings_y, settingsBtn.get_width(), settingsBtn.get_height(), settingsBtn, settingsBtn_Hover)):
             print("Settings button clicked")            
+            draw_settings_menu()
         
         # Update the display and tick the game clock at 60 FPS
         pygame.display.update()
