@@ -28,11 +28,7 @@ def draw_settings_menu():
         #If the X button is clicked, close the settings menu
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed() 
-        # If the mouse is hovering over the X button
-        # TODO: ADD DEBUGGING TO FIX THIS
-        if (WIDTH - text.get_width() - 10 + text.get_width() > mouse[0] > WIDTH - text.get_width() - 10 and 10 + text.get_height() > mouse[1] > 10):
-            if (click[0] == 1):
-                menuOpen = False
+        # If the mouse is hovering over the X text at the top right
             
         pygame.display.update()
         pygame.time.Clock().tick(60)

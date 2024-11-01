@@ -42,22 +42,24 @@ def draw_skill_check(surface):
     if len(points) > 2:
         pygame.draw.polygon(surface, GREEN, points)
 
-    # Draw deep green zone
-    pygame.draw.arc(surface, DEEP_GREEN, (CENTER_X - OUTER_RADIUS, CENTER_Y - OUTER_RADIUS, 2 * OUTER_RADIUS, 2 * OUTER_RADIUS), deep_start_rad, deep_end_rad, 2)
-    pygame.draw.arc(surface, DEEP_GREEN, (CENTER_X - INNER_RADIUS, CENTER_Y - INNER_RADIUS, 2 * INNER_RADIUS, 2 * INNER_RADIUS), deep_start_rad, deep_end_rad, 2)
-    
-    deep_points = []
-    for angle in range(deep_start_angle, deep_end_angle + 1):
-        x = CENTER_X + OUTER_RADIUS * math.cos(math.radians(angle))
-        y = CENTER_Y - OUTER_RADIUS * math.sin(math.radians(angle))
-        deep_points.append((x, y))
-    for angle in range(deep_end_angle, deep_start_angle - 1, -1):
-        x = CENTER_X + INNER_RADIUS * math.cos(math.radians(angle))
-        y = CENTER_Y - INNER_RADIUS * math.sin(math.radians(angle))
-        deep_points.append((x, y))
-    
-    if len(deep_points) > 2:
-        pygame.draw.polygon(surface, DEEP_GREEN, deep_points)
+    if (missed == False):
+        # Draw deep green zone
+        pygame.draw.arc(surface, DEEP_GREEN, (CENTER_X - OUTER_RADIUS, CENTER_Y - OUTER_RADIUS, 2 * OUTER_RADIUS, 2 * OUTER_RADIUS), deep_start_rad, deep_end_rad, 2)
+        pygame.draw.arc(surface, DEEP_GREEN, (CENTER_X - INNER_RADIUS, CENTER_Y - INNER_RADIUS, 2 * INNER_RADIUS, 2 * INNER_RADIUS), deep_start_rad, deep_end_rad, 2)
+        
+        # Draw the deep green zone only if the player hit the skill check
+        deep_points = []
+        for angle in range(deep_start_angle, deep_end_angle + 1):
+            x = CENTER_X + OUTER_RADIUS * math.cos(math.radians(angle))
+            y = CENTER_Y - OUTER_RADIUS * math.sin(math.radians(angle))
+            deep_points.append((x, y))
+        for angle in range(deep_end_angle, deep_start_angle - 1, -1):
+            x = CENTER_X + INNER_RADIUS * math.cos(math.radians(angle))
+            y = CENTER_Y - INNER_RADIUS * math.sin(math.radians(angle))
+            deep_points.append((x, y))
+        
+        if len(deep_points) > 2:
+            pygame.draw.polygon(surface, DEEP_GREEN, deep_points)
     
 def draw_marker(angle):
     x1 = CENTER_X + OUTER_RADIUS * math.cos(math.radians(angle))
@@ -65,11 +67,27 @@ def draw_marker(angle):
     x2 = CENTER_X + INNER_RADIUS * math.cos(math.radians(angle))
     y2 = CENTER_Y - INNER_RADIUS * math.sin(math.radians(angle))
     pygame.draw.line(screen, RED, (x1, y1), (x2, y2), MARKER_WIDTH)
+    
+#def draw_crystal():
+    # Create a crystal left of the circles or right if there already is one present
+    # Crystal will have a decaying health bar that will be displayed above it
+    # When the health bar reaches 0, the crystal will disappear and an assynchronous event will be triggered
+    # to decrease the difficulty of the skill check to a minimum value 
+    
+    
+    # As a placeholder, draw a rectangle to represent the crystal
+    
+
 
 def gameLoop():
     clock = pygame.time.Clock()
     angle = 0
     loop = True
+    
+    # missed variable controls whether the deep green zone is drawn
+    global missed
+    # Initially set to True so there is no deep green zone drawn in first check
+    missed = True
     
     # Use global variable based initially based on import to store the difficulty of the skill check
     global difficulty
@@ -104,10 +122,15 @@ def gameLoop():
                         # pause for 1 second so that the player can see where they landed the marker
                         pygame.display.update()
                         pygame.time.wait(1000)
-
                         dynamic_surface.fill((0, 0, 0, 0))  # Clear the dynamic surface before drawing new skill check
+                        
+                        # player hit the deep green zone so draw a crystal
+                        # draw_crystal()
                         # increase the difficulty of the skill check
                         difficulty -= 10
+                        
+                        # user did not miss so draw the deep green zone
+                        missed = False
 
                     elif (start_angle <= angle <= end_angle):
                         font = pygame.font.Font(None, 72)
@@ -117,12 +140,18 @@ def gameLoop():
                         # pause for 1 second so that the player can see where they landed the marker
                         pygame.display.update()
                         pygame.time.wait(1000)
+                        
+                        # user did not miss so draw the deep green zone
+                        missed = False
 
                     else:
                         # pause for 1 second so that the player can see where they landed the marker
                         pygame.display.update()
                         pygame.time.wait(1000)
 
+                        # user missed so don't draw the deep green zone
+                        missed = True
+                        
                         # reset the difficulty of the skill check
                         difficulty = INITIAL_DIFFICULTY
 

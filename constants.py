@@ -16,6 +16,7 @@ BLACK = tuple(config['colors']['black'])
 GREEN = tuple(config['colors']['green'])
 DEEP_GREEN = tuple(config['colors']['deep_green'])
 RED = tuple(config['colors']['red'])
+BLUE = tuple(config['colors']['blue'])
 
 # Circle settings
 INNER_RADIUS = config['circle_settings']['inner_radius']
@@ -31,6 +32,7 @@ deep_end_angle = 0
 
 # Skill check difficulty
 INITIAL_DIFFICULTY = config['skill_check']['initial_difficulty']
+CRYSTAL_DECAY = config['skill_check']['crystal_decay']
 
 # Pygame Constants
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
